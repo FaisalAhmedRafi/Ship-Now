@@ -80,9 +80,6 @@ lib/
 - **No backend:** Login, shipment creation, and invoice actions (Edit / Hold / Send) are all simulated client-side; nothing is persisted server-side.
 - **Dataset:** `data/*.ts` seeds representative records so tables, pagination, and totals have real data to work with; figures are illustrative.
 
-## AI Assistance Disclosure
-
-Parts of this project were built with Claude as a coding assistant.
 
 ## License
 
