@@ -92,7 +92,7 @@ export default function CreateShipmentPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center gap-3">
+      <div className="mb-6 hidden items-center gap-3 md:flex">
         <button onClick={() => router.back()} className="flex h-9 w-9 items-center justify-center rounded-xl border border-border">
           <ArrowLeft className="h-4 w-4" />
         </button>
@@ -142,8 +142,8 @@ export default function CreateShipmentPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
+            <div className="xl:col-span-2">
               <PackageDetailsSection
                 form={form}
                 errors={errors}
@@ -156,7 +156,7 @@ export default function CreateShipmentPage() {
                 onStepHeight={stepHeight}
               />
             </div>
-            <div className="lg:col-span-3">
+            <div className="xl:col-span-3">
               <ShippingDetailsSection form={form} errors={errors} update={update} shipmentId={shipmentId} shipmentDate={shipmentDate} />
             </div>
           </div>

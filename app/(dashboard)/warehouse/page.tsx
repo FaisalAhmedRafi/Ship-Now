@@ -27,19 +27,30 @@ export default function WarehousePage() {
         <FreightTabs value={freight} onChange={setFreight} />
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-[250px_1fr_300px]">
+      {/* Everything stacked in a single column */}
+      <div className="mb-6">
         <WarehouseStats />
-        <WarehouseInventoryCard />
-        <CapacityUsageCard />
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-[1fr_340px]">
-        <WarehouseStorageTable />
+      <div className="mb-6">
+        <WarehouseInventoryCard />
+      </div>
+
+      {/* Capacity Usage + Package Status side by side */}
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <CapacityUsageCard />
         <PackageStatusCard />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_340px]">
+      <div className="mb-6">
+        <WarehouseStorageTable />
+      </div>
+
+      <div className="mb-6">
         <WarehouseMapCard />
+      </div>
+
+      <div>
         <WarehouseActivityLogCard />
       </div>
     </div>

@@ -9,17 +9,16 @@ const socials = [facebookIcon, twitterIcon, instagramIcon, youtubeIcon, linkedin
 
 export function Footer() {
   return (
-    <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border px-4 py-6 text-xs text-muted sm:px-0">
-      <div className="flex flex-wrap items-center gap-4">
-        <p className="font-bold">Copyright &copy; 2025 Peterdraw</p>
-        <div className="flex flex-wrap ml-6 gap-4">
-          <a href="#" className="hover:text-ink">Privacy Policy</a>
-          <a href="#" className="hover:text-ink">Term and conditions</a>
-          <a href="#" className="hover:text-ink">Contact</a>
-        </div>
+    <footer className="mt-8 flex flex-col items-center gap-4 border-t border-border px-4 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-0">
+      <p className="text-center font-bold sm:text-left">Copyright &copy; 2025 Peterdraw</p>
+
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        <a href="#" className="hover:text-ink">Privacy Policy</a>
+        <a href="#" className="hover:text-ink">Term and conditions</a>
+        <a href="#" className="hover:text-ink">Contact</a>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         {socials.map((Icon, i) => (
           <a
             key={i}

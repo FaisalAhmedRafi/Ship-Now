@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/ui/Pagination";
+import { LogoMark } from "@/components/ui/Logo";
 import { shipments, type ShipmentStatus } from "@/data/shipments";
 import { MetricCard } from "@/components/shipments/MetricCard";
 import { ShipmentRow } from "@/components/shipments/ShipmentRow";
@@ -15,7 +16,16 @@ import truck from "@/assets/ShipmentIcon/truck.png";
 import van from "@/assets/ShipmentIcon/van.png";
 import clock from "@/assets/ShipmentIcon/clock.png";
 import check from "@/assets/ShipmentIcon/check.png";
-import { Search, Filter, Calendar, ChevronDown, Plus, ArrowUpDown, Table2, LayoutGrid, Truck, Clock, PackageCheck, CheckSquare } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Calendar,
+  ChevronDown,
+  Plus,
+  ArrowUpDown,
+  Table2,
+  LayoutGrid,
+} from "lucide-react";
 
 const TABS: Array<ShipmentStatus | "All"> = ["All", "In Transit", "Out for Delivery", "Delivered", "Processing"];
 
@@ -127,73 +137,122 @@ function ShipmentsPageInner() {
 
   return (
     <div className="flex flex-col gap-6 bg-[#F0F0F0]">
-      <PageHeader view={view} onViewChange={setView} />
-
-      {view === "table" && (
-        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {METRIC_CARDS.map((c) => (
-            <MetricCard key={c.label} {...c} />
-          ))}
+      <div className="flex flex-col gap-6">
+        {/* ---------- TABLET / DESKTOP HEADER (hidden on mobile) ---------- */}
+        <div className="hidden md:block">
+          <PageHeader view={view} onViewChange={setView} />
         </div>
-      )}
 
-      {view === "grid" && (
-        <CardHeader
-          title={<StatusTabs status={status} onChange={selectStatus} />}
-          action={
-            <SearchAndFilter
-              query={query}
-              onQueryChange={updateQuery}
-              view={view}
-              sortOrder={sortOrder}
-              onSortOrderChange={setSortOrder}
-            />
-          }
-        />
-        )
-      }
-
-      <Card>
         {view === "table" && (
-        <CardHeader
-          title={<StatusTabs status={status} onChange={selectStatus} />}
-          action={
-            <SearchAndFilter
-              query={query}
-              onQueryChange={updateQuery}
-              view={view}
-              sortOrder={sortOrder}
-              onSortOrderChange={setSortOrder}
-            />
-          }
-        />
-        )
-      }
-
-        {view === "table" ? (
-          <ShipmentsTable
-            rows={pageRows}
-            selected={selected}
-            onToggleRow={toggleRow}
-            sortKey={sortKey}
-            onToggleSort={toggleSort}
-          />
-        ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {pageRows.map((s) => (
-              <ShipmentCard key={s.id} shipment={s} />
+          <div className="mb-6 grid grid-cols-2 gap-6 xl:grid-cols-4">
+            {METRIC_CARDS.map((c) => (
+              <MetricCard key={c.label} {...c} />
             ))}
           </div>
         )}
 
-        <Pagination
-          page={pageSafe}
-          pageSize={pageSize}
-          total={filtered.length}
-          onPageChange={setPage}
-          onPageSizeChange={(n) => { setPageSize(n); setPage(1); }}
+        {/* ---------- MOBILE-ONLY utility row + status tabs ---------- */}
+        <div className="flex flex-col gap-3 md:hidden">
+          <MobileUtilityRow query={query} onQueryChange={updateQuery} />
+          <StatusTabs status={status} onChange={selectStatus} />
+        </div>
+
+        {view === "grid" && (
+          <div className="hidden md:block">
+            <CardHeader
+              title={<StatusTabs status={status} onChange={selectStatus} />}
+              action={
+                <SearchAndFilter
+                  query={query}
+                  onQueryChange={updateQuery}
+                  view={view}
+                  sortOrder={sortOrder}
+                  onSortOrderChange={setSortOrder}
+                />
+              }
+            />
+          </div>
+        )}
+
+        <Card>
+          {view === "table" && (
+            <div className="hidden md:block">
+              <CardHeader
+                title={<StatusTabs status={status} onChange={selectStatus} />}
+                action={
+                  <SearchAndFilter
+                    query={query}
+                    onQueryChange={updateQuery}
+                    view={view}
+                    sortOrder={sortOrder}
+                    onSortOrderChange={setSortOrder}
+                  />
+                }
+              />
+            </div>
+          )}
+
+          {view === "table" ? (
+            <ShipmentsTable
+              rows={pageRows}
+              selected={selected}
+              onToggleRow={toggleRow}
+              sortKey={sortKey}
+              onToggleSort={toggleSort}
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {pageRows.map((s) => (
+                <ShipmentCard key={s.id} shipment={s} />
+              ))}
+            </div>
+          )}
+
+          <Pagination
+            page={pageSafe}
+            pageSize={pageSize}
+            total={filtered.length}
+            onPageChange={setPage}
+            onPageSizeChange={(n) => { setPageSize(n); setPage(1); }}
+          />
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+/** Mobile-only row: full search bar + filter icon + add icon. */
+function MobileUtilityRow({
+  query,
+  onQueryChange,
+}: {
+  query: string;
+  onQueryChange: (q: string) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative flex-1">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+        <input
+          value={query}
+          onChange={(e) => onQueryChange(e.target.value)}
+          placeholder="Search id, company, etc"
+          className="w-full rounded-xl border border-border bg-white py-2.5 pl-10 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"
         />
-      </Card>
+      </div>
+      <button
+        aria-label="Filter"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-ink"
+      >
+        <Filter className="h-4 w-4" />
+      </button>
+      <Link
+        href="/create-shipment"
+        aria-label="New Shipment"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-white"
+      >
+        <Plus className="h-5 w-5" />
+      </Link>
     </div>
   );
 }
@@ -253,6 +312,7 @@ function StatusTabs({ status, onChange }: { status: (typeof TABS)[number]; onCha
   );
 }
 
+/** Tablet/Desktop-only: icon-only search (click to expand) + icon-only filter + text dropdown. */
 function SearchAndFilter({
   query,
   onQueryChange,
@@ -266,19 +326,37 @@ function SearchAndFilter({
   sortOrder: "newest" | "oldest";
   onSortOrderChange: (order: "newest" | "oldest") => void;
 }) {
+  const [searchOpen, setSearchOpen] = useState(false);
+
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-        <input
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-          placeholder="Search id, company, etc"
-          className="w-40 rounded-xl border border-border bg-white py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 sm:w-56"
-        />
-      </div>
-      <button className="flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm text-ink">
-        <Filter className="h-4 w-4" /> Filter <ChevronDown className="h-3.5 w-3.5" />
+      {searchOpen ? (
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+          <input
+            autoFocus
+            value={query}
+            onChange={(e) => onQueryChange(e.target.value)}
+            onBlur={() => !query && setSearchOpen(false)}
+            placeholder="Search id, company, etc"
+            className="w-48 rounded-xl border border-border bg-white py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"
+          />
+        </div>
+      ) : (
+        <button
+          aria-label="Search"
+          onClick={() => setSearchOpen(true)}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-border text-ink"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+      )}
+
+      <button
+        aria-label="Filter"
+        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border text-ink"
+      >
+        <Filter className="h-4 w-4" />
       </button>
 
       {view === "table" ? (

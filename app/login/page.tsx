@@ -57,27 +57,46 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
-      <div className="flex flex-col justify-between bg-brand px-8 py-10 text-white lg:w-1/2 lg:px-16 lg:py-14">
-        <LogoLockup className="flex items-center justify-center" markClassName="h-8 w-8" textClassName="text-white" loc="login" />
-        <div className="my-5 lg:my-0 flex items-center justify-center">
-          <HeroIllustration />
+    <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row">
+      {/* Hero panel — full-width & stacked on mobile/tablet, side-by-side from lg up */}
+      <div className="flex flex-col justify-between bg-brand px-6 py-8 text-white sm:px-10 sm:py-10 md:px-14 md:py-12 lg:w-1/2 lg:px-16 lg:py-14">
+        <LogoLockup
+          className="flex items-center justify-center"
+          markClassName="h-7 w-7 sm:h-8 sm:w-8"
+          textClassName="text-white"
+          loc="login"
+        />
+
+        <div className="my-6 flex items-center justify-center sm:my-8 md:my-10 lg:my-0">
+          <div className="w-full max-w-[240px] sm:max-w-xs md:max-w-sm lg:max-w-md">
+            <HeroIllustration />
+          </div>
         </div>
-        <div className="flex flex-col align-center justify-center">
-          <h2 className="flex justify-center mb-2 text-3xl font-extrabold sm:text-4xl">Welcome to ShipNow</h2>
-          <p className="flex justify-center text-sm text-white/80 sm:text-base">
+
+        <div className="flex flex-col items-center justify-center text-center">
+          <h2 className="mb-2 text-2xl font-extrabold leading-tight sm:text-3xl md:text-4xl">
+            Welcome to ShipNow
+          </h2>
+          <p className="max-w-xs text-sm text-white/80 sm:max-w-sm sm:text-base md:max-w-md">
             Manage your shipments, fleet, and warehouse in one smart dashboard.
           </p>
         </div>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12 sm:px-10 lg:w-1/2">
-        <form onSubmit={handleSubmit} noValidate className="w-full max-w-sm">
-          <div className="mb-8 flex justify-center">
-            <LogoMark className="h-9 w-9" />
+      {/* Form panel */}
+      <div className="flex flex-1 items-center justify-center px-6 py-10 sm:px-10 sm:py-12 md:px-16 md:py-14 lg:w-1/2 lg:px-16 lg:py-12">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="w-full max-w-sm md:max-w-md lg:max-w-sm"
+        >
+          <div className="mb-6 flex justify-center sm:mb-8">
+            <LogoMark className="h-8 w-8 sm:h-9 sm:w-9" />
           </div>
-          <h1 className="mb-1 text-center text-2xl font-bold text-ink">Welcome Back</h1>
-          <p className="mb-8 text-center text-sm text-muted">
+          <h1 className="mb-1 text-center text-xl font-bold text-ink sm:text-2xl">
+            Welcome Back
+          </h1>
+          <p className="mb-6 text-center text-sm text-muted sm:mb-8">
             Log in to continue managing your logistics with ShipNow
           </p>
 
@@ -97,7 +116,11 @@ export default function LoginPage() {
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "email-error" : undefined}
             />
-            {errors.email && <p id="email-error"><FieldError>{errors.email}</FieldError></p>}
+            {errors.email && (
+              <p id="email-error">
+                <FieldError>{errors.email}</FieldError>
+              </p>
+            )}
           </div>
 
           <div className="mb-5">
@@ -121,15 +144,19 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted hover:text-ink"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            {errors.password && <p id="password-error"><FieldError>{errors.password}</FieldError></p>}
+            {errors.password && (
+              <p id="password-error">
+                <FieldError>{errors.password}</FieldError>
+              </p>
+            )}
           </div>
 
-          <div className="mb-6 flex items-center justify-between text-sm">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-y-2 text-sm">
             <label className="flex items-center gap-2 text-ink">
               <input
                 type="checkbox"
