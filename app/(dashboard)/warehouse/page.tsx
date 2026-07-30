@@ -27,32 +27,70 @@ export default function WarehousePage() {
         <FreightTabs value={freight} onChange={setFreight} />
       </div>
 
-      {/* Everything stacked in a single column */}
-      <div className="mb-6">
-        <WarehouseStats />
+      <div className="warehouse-grid">
+        <div className="min-w-0" style={{ gridArea: "stats" }}>
+          <WarehouseStats />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "inv" }}>
+          <WarehouseInventoryCard />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "cap" }}>
+          <CapacityUsageCard />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "pkg" }}>
+          <PackageStatusCard />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "stor" }}>
+          <WarehouseStorageTable />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "map" }}>
+          <WarehouseMapCard />
+        </div>
+        <div className="min-w-0" style={{ gridArea: "act" }}>
+          <WarehouseActivityLogCard />
+        </div>
       </div>
 
-      <div className="mb-6">
-        <WarehouseInventoryCard />
-      </div>
+      <style jsx>{`
+        .warehouse-grid {
+          display: grid;
+          gap: 1.5rem;
+          grid-template-columns: 1fr;
+          grid-template-areas:
+            "stats"
+            "inv"
+            "cap"
+            "pkg"
+            "stor"
+            "map"
+            "act";
+        }
 
-      {/* Capacity Usage + Package Status side by side */}
-      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <CapacityUsageCard />
-        <PackageStatusCard />
-      </div>
+        /* Tablet: stats row, inventory row, cap+pkg paired, rest full width */
+        @media (min-width: 768px) {
+          .warehouse-grid {
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+              "stats stats"
+              "inv inv"
+              "cap pkg"
+              "stor stor"
+              "map map"
+              "act act";
+          }
+        }
 
-      <div className="mb-6">
-        <WarehouseStorageTable />
-      </div>
-
-      <div className="mb-6">
-        <WarehouseMapCard />
-      </div>
-
-      <div>
-        <WarehouseActivityLogCard />
-      </div>
+        /* Desktop: main column (stats+inv, storage, map) + persistent sidebar (cap, pkg, act) */
+        @media (min-width: 1024px) {
+          .warehouse-grid {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) 340px;
+            grid-template-areas:
+              "stats inv cap"
+              "stor  stor pkg"
+              "map   map  act";
+          }
+        }
+      `}</style>
     </div>
   );
 }
