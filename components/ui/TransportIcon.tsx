@@ -3,13 +3,16 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-// ── Static imports for your 4 local transport icons ─────────────────────────
 import AirFreightIcon from "@/assets/transport/flight.png";
 import RoadFreightIcon from "@/assets/transport/truck.png";
 import OceanFreightIcon from "@/assets/transport/ship.png";
 import RailFreightIcon from "@/assets/transport/train.png";
 
-type Freight = "Air Freight" | "Road Freight" | "Ocean Freight" | "Rail Freight";
+type Freight =
+  | "Air Freight"
+  | "Road Freight"
+  | "Ocean Freight"
+  | "Rail Freight";
 
 const iconByFreight: Record<Freight, typeof AirFreightIcon> = {
   "Air Freight": AirFreightIcon,
@@ -27,8 +30,9 @@ export function TransportIcon({
   className?: string;
   badge?: boolean;
 }) {
-  const icon = freight ? iconByFreight[freight] : undefined;
-  if (!icon) return null;
+  if (!freight) return null;
+
+  const icon = iconByFreight[freight];
 
   return (
     <span
@@ -38,7 +42,11 @@ export function TransportIcon({
         className
       )}
     >
-      <Image src={icon} alt={freight} className="h-full w-full object-contain" />
+      <Image
+        src={icon}
+        alt={freight}
+        className="h-full w-full object-contain"
+      />
     </span>
   );
 }
